@@ -31,14 +31,13 @@ class ApplicationController < ActionController::Base
   def set_one_month 
     @first_day = params[:date].nil? ? Date.current.beginning_of_month : params[:date].to_date
     @last_day = @first_day.end_of_month
-    one_month = [*@first_day..@last_day]
-    @attendances = @user.attendances.where(work_on: @first_day..@last_day).order(:work_on)
+    @attendances = @user.attendances.where(work_on: @first_day..@last_day).order(:clock_in, :work_on)
 
     unless @attendances.present?
       ActiveRecord::Base.transaction do
-        one_month.each { |day| @user.attendances.create!(work_on: day) }
+        [*@first_day..@last_day].each { |day| @user.attendances.create!(work_on: day) }
       end
-    @attendances = @user.attendances.where(work_on: @first_day..@last_day).order(:work_on)
+    @attendances = @user.attendances.where(work_on: @first_day..@last_day).order(:clock_in, :work_on)
     end
 
   rescue ActiveRecord::RecordInvalid

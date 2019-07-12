@@ -42,6 +42,10 @@ module SessionsHelper
     !current_user.nil?
   end
 
+  def admin?
+    current_user.admin
+  end
+
   def redirect_back_or(default_url)
     redirect_to(session[:forwarding_url] || default_url)
     session.delete(:forwarding_url)

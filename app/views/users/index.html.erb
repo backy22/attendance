@@ -22,7 +22,6 @@
         </td>
         <td class="center">
           <% if current_user.admin? && !current_user?(user) %>
-            <%= link_to "Edit info", edit_basic_info_user_path(user), remote: true, class: "btn btn-success" %>
             <%= link_to "Delete", user, method: :delete, data: { confirm: "削除してよろしいですか？" }, class: "btn btn-danger" %>
           <% end %>
         </td>
@@ -31,6 +30,3 @@
   </table>
   <%= will_paginate %>
 </div>
-
-<!--modal window-->
-<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

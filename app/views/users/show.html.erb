@@ -4,19 +4,19 @@
     <tr>
       <td>【<%= l(@first_day, format: :middle) %>】Attendance sheet</td>
       <td>Beginning of Month：<%= l(@first_day, format: :short) %></td>
+      <td>End of Month：<%= l(@last_day, format: :short) %></td>
     </tr>
 
     <tr>
       <td>Name：<%= @user.name %></td>
       <td>Number of Attendances：<%= @worked_sum %> days</td>
-      <td>End of Month：<%= l(@last_day, format: :short) %></td>
     </tr>
   </table>
 </div>
 
 <div class="btn-users-show">
   <%= link_to "⇦ Previous month", user_path(date: @first_day.prev_month), class: "btn btn-info" %>
-  <%= link_to "Edit whole month", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
+  <%= link_to "Edit whole month", edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
   <%= link_to "Next month ⇨", user_path(date: @first_day.next_month), class: "btn btn-info" %>
 </div>
 
@@ -36,7 +36,8 @@
 
     <tbody>
       <% [*@first_day..@last_day].each do |day| %>
-        <% attendances = @attendances.where(work_on: day) %>
+        <% attendances = @attendances.select{|a| a.work_on == day} %>
+        <% attendances = [Attendance.create(work_on: day, user_id: @user.id)] if attendances.empty? %>
         <tr>
           <td rowspan=<%= rowspan(attendances) %>><%= l(day, format: :short) %></td>
           <td rowspan=<%= rowspan(attendances) %>><%= $days_of_the_week[day.wday] %></td>
@@ -44,7 +45,12 @@
             <% if i > 0 %><tr><% end %>
               <td>
                 <% if btn_text = attendance_state(attendance) %>
-                  <%= link_to "Clock #{btn_text}", user_attendance_path(@user, attendance), method: :patch, class: "btn btn-primary btn-attendance" %>
+                  <%= link_to "Clock #{btn_text}", user_attendance_path(@user, attendance), method: :patch, class: "btn btn-primary" %>
+                <% else %>
+                  <%= link_to "Edit info", edit_user_attendance_path(@user, attendance), remote: true, class: "btn btn-success", "data-toggle" => "modal", "data-target" => "edit-attendance-info" %>
+                  <% if attendance.clock_in || attendance.clock_out %>
+                    <%= link_to "Delete", user_attendance_path(@user, attendance), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+                  <% end %>
                 <% end %>
               </td>
               <td><%= l(attendance.clock_in, format: :time) if attendance.clock_in.present? %></td>
@@ -56,12 +62,17 @@
                 <% end %>
               </td>
               <td><%= attendance.note %></td>
-              <% if i > 0 %></tr><% end %>
+            <% if i > 0 %></tr><% end %>
           <% end %>
-          <% unless attendances.map(&:clock_in).push(attendances.map(&:clock_out)).flatten.include?(nil) %>
+          <% if !attendances.map(&:clock_in).push(attendances.map(&:clock_out)).flatten.include?(nil) %>
             <tr>
               <td>
-                <%= link_to "Clock in", user_attendances_path(@user), method: :post, class: "btn btn-primary btn-attendance" %>
+                <% if day == Date.today %>
+                  <%= link_to "Clock in", user_attendances_path(@user), method: :post, class: "btn btn-primary" %>
+                <% else %>
+                    <% attendance = Attendance.create(work_on: day, user_id: @user.id) %>
+                    <%= link_to "Edit info", edit_user_attendance_path(@user, attendance), remote: true, class: "btn btn-success", "data-toggle" => "modal", "data-target" => "edit-attendance-info" %>
+                <% end %>
               </td>
               <td></td>
               <td></td>
@@ -74,7 +85,6 @@
     </tbody>
 
     <tfoot>
-      <!--rowspan:縦結合、colspan：横結合-->
       <tr>
         <td colspan="2">Days of month</td>
         <td colspan="2" rowspan="2"></td>
@@ -82,9 +92,12 @@
         <td rowspan="2"></td>
       </tr>
       <tr>
-        <td colspan="2"><%= @attendances.count %></td>
+        <td colspan="2"><%= [*@first_day..@last_day].count %></td>
         <td colspan="2"><%= format("%.2f", @total_working_times.to_f) %></td>
       </tr>
     </tfoot>    
   </table>
 </div>
+
+<!--modal window-->
+<div id="edit-attendance-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
