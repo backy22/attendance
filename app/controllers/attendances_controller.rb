@@ -13,7 +13,7 @@ class AttendancesController < ApplicationController
     else
       flash[:danger] = UPDATE_ERROR_MSG
     end
-    redirect_to @user
+    redirect_to user_attendances_path(@user)
   end
 
   def edit
@@ -33,15 +33,15 @@ class AttendancesController < ApplicationController
       @attendance.update_attributes(clock_out: Time.current.change(sec: 0))
       flash[:info] = "Clock out successful!"
     end
-    redirect_to @user
+    redirect_to user_attendances_path(@user)
   rescue => e
     flash[:danger] = e.message
-    redirect_to @user
+    redirect_to user_attendances_path(@user)
   end
 
   def destroy
     @attendance.destroy
-    redirect_to @user
+    redirect_to user_attendances_path(@user)
   end
 
   private

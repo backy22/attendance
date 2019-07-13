@@ -10,14 +10,14 @@ class SessionsController < ApplicationController
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
       redirect_back_or user
     else
-      flash.now[:danger] = '認証に失敗しました。'
+      flash.now[:danger] = 'Failed authenticattion.'
       render :new
     end
   end
 
   def destroy
     log_out if logged_in?
-    flash[:success] = 'ログアウトしました。'
+    flash[:success] = 'Log out complete.'
     redirect_to root_url
   end
 end

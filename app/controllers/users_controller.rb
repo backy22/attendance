@@ -1,15 +1,19 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :attendances, :edit, :update, :destroy]
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user, only: [:edit, :update]
   before_action :admin_user, only: [:destroy]
-  before_action :set_one_month, only: [:show]
+  before_action :set_one_month, only: [:show, :attendances]
 
   def index
     @users = User.paginate(page: params[:page])
   end
 
   def show
+    @worked_sum = @attendances.where.not(clock_in: nil).map(&:work_on).uniq.count
+  end
+
+  def attendances
     @worked_sum = @attendances.where.not(clock_in: nil).map(&:work_on).uniq.count
   end
 

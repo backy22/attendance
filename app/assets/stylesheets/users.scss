@@ -1,18 +1,12 @@
-/* ユーザー情報テーブル */
-
 .user-table {
   vertical-align: middle;
   text-align: center;
 }
 
-/* ユーザー情報下ボタン */
-
 .btn-users-show {
   margin-top: -10px;
   margin-bottom: 10px;
 }
-
-/* ユーザー勤怠情報テーブル */
 
 #table-attendances {
   th {
@@ -25,8 +19,7 @@
   }
 }
 
-/* 入力フォーム */
-
+/* form */
 .label-signup {
   margin-top: 5px;
 }
@@ -43,7 +36,7 @@
   margin-top: 10px;
 }
 
-/* ユーザー一覧ページ */
+/* user table */
 
 #table-users {
   td {
@@ -51,13 +44,12 @@
   }  
 }
 
-/* 基本情報編集モーダルウインドウ */
-
-.label-basic-info {
-  margin-top: 5px;
+/* home */
+.jumbotron-extend {
+  height: 30%;
 }
 
-.btn-basic-info {
-  margin: 15px 0;
+.jumbotron-extend .btn {
   width: 30%;
+  margin: 1%;
 }

@@ -23,7 +23,7 @@ class Attendance < ApplicationRecord
     if clock_in.present? && clock_out.present?
       attendances = Attendance.where(work_on: work_on, user_id: user_id).where.not(id: id).where.not(clock_in: nil).where.not(clock_out: nil)
       attendances.each do |attendance|
-        if clock_in <= attendance.clock_out && clock_out >= attendance.clock_in
+        if clock_in < attendance.clock_out && clock_out > attendance.clock_in
           errors.add(:clock_in, " invalid hours")
         end
       end
