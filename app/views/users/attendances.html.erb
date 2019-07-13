@@ -66,7 +66,7 @@
           <% if !attendances.map(&:clock_in).push(attendances.map(&:clock_out)).flatten.include?(nil) %>
             <tr>
               <td>
-                <% if day == Date.today %>
+                <% if day == Time.zone.today %>
                   <%= link_to "Clock in", user_attendances_path(@user), method: :post, class: "btn btn-primary" %>
                 <% else %>
                     <% attendance = Attendance.create(work_on: day, user_id: @user.id) %>

@@ -1,13 +1,13 @@
 class AttendancesController < ApplicationController
   before_action :set_user, only: [:create, :edit, :update, :destroy]
-  before_action :set_attendance, only: [:create, :edit, :update, :destroy]
+  before_action :set_attendance, only: [:edit, :update, :destroy]
   before_action :logged_in_user, only: [:update]
   before_action :admin_or_correct_user, only: [:update]
 
   UPDATE_ERROR_MSG = "Clock in/out failed."
 
   def create
-    @attendance = Attendance.new(user_id: @user.id, work_on: Date.today, clock_in: Time.current.change(sec: 0))
+    @attendance = Attendance.new(user_id: @user.id, work_on: Time.zone.today, clock_in: Time.current.change(sec: 0))
     if @attendance.save!
       flash[:info] = "Clock in successful!"
     else

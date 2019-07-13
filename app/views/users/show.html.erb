@@ -1,8 +1,8 @@
 <% provide(:title, @user.name) %>
 <div class="center jumbotron jumbotron-extend">
   <h1>Hi <%= @user.name %>!</h1>
-  <% attendance = @attendances.select{|a| a.work_on == Date.today && a.clock_out == nil}.sort_by{|a| a.created_at}.first %>
-  <% attendance = Attendance.create(work_on: Date.today, user_id: @user.id) if attendance.blank? %>
+  <% attendance = @attendances.select{|a| a.work_on == Time.zone.today && a.clock_out == nil}.sort_by{|a| a.created_at}.first %>
+  <% attendance = Attendance.create(work_on: Time.zone.today, user_id: @user.id) if attendance.blank? %>
   <% if attendance.clock_in.present? %>
     <%= link_to "Clock in", user_attendance_path(@user, attendance), method: :patch, class: "btn btn-lg btn-primary disabled" %>
     <%= link_to "Clock out", user_attendance_path(@user, attendance), method: :patch, class: "btn btn-lg btn-primary" %>
