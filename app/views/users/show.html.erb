@@ -16,7 +16,6 @@
 
 <div class="btn-users-show">
   <%= link_to "⇦ Previous month", user_path(date: @first_day.prev_month), class: "btn btn-info" %>
-  <%= link_to "Edit whole month", edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
   <%= link_to "Next month ⇨", user_path(date: @first_day.next_month), class: "btn btn-info" %>
 </div>
 

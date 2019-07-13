@@ -21,8 +21,11 @@ class AttendancesController < ApplicationController
 
   def update
     if params['fix']
-      @attendance.update!(attendance_params)
-      flash[:info] = "Update successful!"
+      if @attendance.update(attendance_params)
+        flash[:info] = "Update successful!"
+      else
+        flash[:danger] = "Update failed"
+      end
     elsif @attendance.clock_in.nil?
       @attendance.update_attributes(clock_in: Time.current.change(sec: 0))
       flash[:info] = "Clock in successful!"
@@ -33,7 +36,7 @@ class AttendancesController < ApplicationController
     redirect_to @user
   rescue => e
     flash[:danger] = e.message
-    render 'users#show'
+    redirect_to @user
   end
 
   def destroy

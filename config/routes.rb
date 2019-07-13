@@ -7,10 +7,6 @@ Rails.application.routes.draw do
   delete '/logout', to: 'sessions#destroy'
 
   resources :users do
-    member do
-      get 'edit_one_month'
-      patch 'update_one_month'
-    end
     resources :attendances, only: [:create, :edit, :update, :destroy]
   end
 end
