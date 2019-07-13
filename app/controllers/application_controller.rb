@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   def correct_user
-    redirect_to(root_url) unless current_user?(@user)
+    redirect_to root_url unless current_user?(@user)
   end
 
   def admin_user
@@ -44,4 +44,5 @@ class ApplicationController < ActionController::Base
     flash[:danger] = "Unable to read the data. Please reload the page."
     redirect_to root_url
   end
+
 end
