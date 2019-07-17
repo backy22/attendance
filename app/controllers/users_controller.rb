@@ -6,7 +6,8 @@ class UsersController < ApplicationController
   before_action :set_one_month, only: [:show, :attendances]
 
   def index
-    @users = User.paginate(page: params[:page])
+    @q = User.ransack(params[:q])
+    @users = @q.result(distinct: true).order(id: :desc).page(params[:page]).per(20)
   end
 
   def show
@@ -54,7 +55,8 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(
-        :name, 
+        :name,
+        :img,
         :email, 
         :password, 
         :password_confirmation

@@ -41,7 +41,17 @@
 #table-users {
   td {
     vertical-align: middle;
+    height: 60px;
   }  
+}
+
+.img-column {
+  width: 60px;
+}
+
+.img-list {
+  width: 50px;
+  border-radius: 50%;
 }
 
 /* home */

@@ -2,24 +2,25 @@
 <h1>User List</h1>
 
 <div class="col-md-10 col-md-offset-1">
-  <%= will_paginate %>
+
+  <%= search_form_for @q, class: 'form-inline my-2 my-lg-0' do |f| %>
+    <%= f.search_field :name_cont, class: 'form-control mr-sm-2' %>
+    <%= f.submit "Search", :class => 'btn btn-outline-success my-2 my-sm-0' %>
+  <% end %>
+
   <table class="table table-condensed table-hover" id="table-users">
     <thead>
       <tr>
-        <th><%= User.human_attribute_name :name %></th>
+        <th></th>
+        <th><%= sort_link(@q, :name, "Name") %></th>
         <th></th>
       </tr>
     </thead>
 
     <% @users.each do |user| %>
       <tr>
-        <td>
-          <% if current_user.admin? %>
-            <%= link_to user.name, user %>
-          <% else %>
-            <%= user.name %>
-          <% end %>
-        </td>
+        <td class="img-column"><%= image_tag user.img.url, :class => "img-list" if user.img? %>
+        <td><%= link_to user.name, user %></td>
         <td class="center">
           <% if current_user.admin? && !current_user?(user) %>
             <%= link_to "Delete", user, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
@@ -28,5 +29,5 @@
       </tr>
     <% end %>
   </table>
-  <%= will_paginate %>
+  <%= paginate @users %>
 </div>
