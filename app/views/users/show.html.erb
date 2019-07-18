@@ -1,6 +1,12 @@
 <% provide(:title, @user.name) %>
 <div class="center jumbotron jumbotron-extend">
   <h1>Hi <%= @user.name %>!</h1>
+  <h2>
+    <span id="clock_date"></span>
+    <span id="clock_year"></span>
+    <span id="clock_weeks"></span>
+    <span id="clock_time"></span>
+  </h2>
   <% attendance = @attendances.select{|a| a.work_on == Time.zone.today && a.clock_out == nil}.sort_by{|a| a.created_at}.first %>
   <% attendance = Attendance.create(work_on: Time.zone.today, user_id: @user.id) if attendance.blank? %>
   <% if attendance.clock_in.present? %>

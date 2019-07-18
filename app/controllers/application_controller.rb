@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
       ActiveRecord::Base.transaction do
         [*@first_day..@last_day].each { |day| @user.attendances.create!(work_on: day) }
       end
-    @attendances = @user.attendances.where(work_on: @first_day..@last_day).order(:clock_in, :work_on)
+    @attendances = @user.attendances.where(work_on: @first_day..@last_day)
     end
 
   rescue ActiveRecord::RecordInvalid
